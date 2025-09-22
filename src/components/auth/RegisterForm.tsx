@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import {
   Box,
   TextField,
@@ -20,25 +23,60 @@ interface RegisterFormProps {
   onSwitchToLogin: () => void;
 }
 
+
+// Validation schema
+const validationSchema = yup.object({
+  fullName: yup
+    .string()
+    .required('Full name is required')
+    .min(2, 'Full name must be at least 2 characters')
+    .max(50, 'Full name must be less than 50 characters')
+    .matches(
+      /^[a-zA-Z\s]+$/,
+      'Full name must contain only letters and spaces'
+    ),
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Please enter a valid email address')
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'Please enter a complete email address (e.g., user@domain.com)'
+    ),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+    ),
+  agreeToTerms: yup
+    .boolean()
+    .oneOf([true], 'You must agree to the Terms and Conditions'),
+});
+
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    agreeToTerms: false,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    watch,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    mode: 'onChange',
+    defaultValues: {
+      fullName: '',
+      email: '',
+      password: '',
+      agreeToTerms: false,
+    },
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
+  const agreeToTerms = watch('agreeToTerms');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Register data:', formData);
+  const onSubmit = (data: any) => {
+    console.log('Register data:', data);
     // Handle registration logic here
   };
 
@@ -77,13 +115,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
       </Box>
 
       {/* Register Form */}
-      <Box component="form" onSubmit={handleSubmit}>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <TextField
           fullWidth
           label="Full Name"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleInputChange}
+          {...register('fullName')}
+          error={!!errors.fullName}
+          helperText={errors.fullName?.message}
           sx={{
             mb: 2,
             '& .MuiOutlinedInput-root': {
@@ -91,16 +129,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
               borderRadius: 2,
             },
           }}
-          required
         />
         
         <TextField
           fullWidth
           label="E-mail Address"
-          name="email"
           type="email"
-          value={formData.email}
-          onChange={handleInputChange}
+          {...register('email')}
+          error={!!errors.email}
+          helperText={errors.email?.message}
           sx={{
             mb: 2,
             '& .MuiOutlinedInput-root': {
@@ -108,16 +145,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
               borderRadius: 2,
             },
           }}
-          required
         />
         
         <TextField
           fullWidth
           label="Password"
-          name="password"
           type="password"
-          value={formData.password}
-          onChange={handleInputChange}
+          {...register('password')}
+          error={!!errors.password}
+          helperText={errors.password?.message}
           sx={{
             mb: 2,
             '& .MuiOutlinedInput-root': {
@@ -125,49 +161,53 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
               borderRadius: 2,
             },
           }}
-          required
         />
 
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="agreeToTerms"
-              checked={formData.agreeToTerms}
-              onChange={handleInputChange}
-              required
-              sx={{
-                '&.Mui-checked': {
-                  color: 'primary.main',
-                },
-              }}
-            />
-          }
-          label={
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              I agree to the{' '}
-              <Link
-                href="#"
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...register('agreeToTerms')}
                 sx={{
-                  color: 'primary.main',
-                  textDecoration: 'none',
-                  '&:hover': {
-                    textDecoration: 'underline',
+                  '&.Mui-checked': {
+                    color: 'primary.main',
                   },
                 }}
-              >
-                Terms and Conditions
-              </Link>
-            </Typography>
-          }
-          sx={{ mb: 2, alignItems: 'flex-start' }}
-        />
+              />
+            }
+            label={
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                I agree to the{' '}
+                <Link
+                  href="#"
+                  sx={{
+                    color: 'primary.main',
+                    textDecoration: 'none',
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  Terms and Conditions
+                </Link>
+              </Typography>
+            }
+            sx={{ alignItems: 'center' }}
+          />
+        </Box>
+        
+        {errors.agreeToTerms && (
+          <Typography variant="body2" color="error" sx={{ textAlign: 'center', mb: 1 }}>
+            {errors.agreeToTerms.message}
+          </Typography>
+        )}
 
         <Button
           type="submit"
           fullWidth
           variant="contained"
           size="large"
-          disabled={!formData.agreeToTerms}
+          disabled={!isValid || !agreeToTerms}
           sx={{
             mb: 3,
             py: 1.5,
