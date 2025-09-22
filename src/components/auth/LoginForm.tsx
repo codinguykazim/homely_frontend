@@ -20,6 +20,7 @@ import {
   Visibility,
   VisibilityOff,
 } from '@mui/icons-material';
+import { useTheme as useThemeContext } from '../../contexts/ThemeContext';
 
 interface LoginFormProps {
   onSwitchToRegister: () => void;
@@ -27,6 +28,7 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
   const navigate = useNavigate();
+  const { isDarkMode } = useThemeContext();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -63,7 +65,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
         borderRadius: 3,
         border: '1px solid',
         borderColor: 'divider',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: isDarkMode ? 'rgba(18, 18, 18, 0.95)' : 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(10px)',
       }}
     >

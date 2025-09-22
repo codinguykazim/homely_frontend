@@ -16,9 +16,11 @@ import {
   ArrowBack as ArrowBackIcon,
   CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material';
+import { useTheme as useThemeContext } from '../../contexts/ThemeContext';
 
 const ForgotPasswordForm: React.FC = () => {
   const navigate = useNavigate();
+  const { isDarkMode } = useThemeContext();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -68,7 +70,7 @@ const ForgotPasswordForm: React.FC = () => {
           borderRadius: 3,
           border: '1px solid',
           borderColor: 'divider',
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          backgroundColor: isDarkMode ? 'rgba(18, 18, 18, 0.95)' : 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(10px)',
         }}
       >
@@ -147,7 +149,7 @@ const ForgotPasswordForm: React.FC = () => {
         borderRadius: 3,
         border: '1px solid',
         borderColor: 'divider',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: isDarkMode ? 'rgba(18, 18, 18, 0.95)' : 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(10px)',
       }}
     >

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Container, Typography, useTheme, Chip} from '@mui/material';
+import {Box, Container, Typography, useTheme, Chip, IconButton, Tooltip} from '@mui/material';
 import {
     LocationOnRounded as LocationIcon,
     StarRounded as StarIcon,
@@ -17,9 +17,12 @@ import {
     ExploreRounded as ExploreIcon,
     FlightRounded as FlightIcon,
     DirectionsCarRounded as CarIcon,
-    PetsRounded as PetIcon
+    PetsRounded as PetIcon,
+    WbSunnyRounded as LightModeIcon,
+    Brightness2Rounded as DarkModeIcon
 } from '@mui/icons-material';
 import Logo from '../Logo';
+import { useTheme as useThemeContext } from '../../contexts/ThemeContext';
 
 interface AuthLayoutProps {
     children: React.ReactNode;
@@ -35,14 +38,17 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                                                    description,
                                                }) => {
     const theme = useTheme();
+    const { isDarkMode, toggleTheme } = useThemeContext();
 
     return (
         <Box sx={{display: 'flex', minHeight: '100vh'}}>
-            {/* Left Panel - Blue Background */}
+            {/* Left Panel - Theme-aware Background */}
             <Box
                 sx={{
                     flex: 1,
-                    background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+                    background: isDarkMode 
+                        ? 'linear-gradient(135deg, #0d47a1 0%, #1565c0 100%)' 
+                        : 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
                     display: {xs: 'none', md: 'flex'},
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -57,7 +63,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                         position: 'absolute',
                         top: '15%',
                         right: '10%',
-                        opacity: 0.1,
+                        opacity: isDarkMode ? 0.15 : 0.1,
                         animation: 'float 6s ease-in-out infinite',
                         '@keyframes float': {
                             '0%, 100%': {transform: 'translateY(0px) rotate(0deg)'},
@@ -73,7 +79,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                         position: 'absolute',
                         bottom: '20%',
                         left: '8%',
-                        opacity: 0.08,
+                        opacity: isDarkMode ? 0.12 : 0.08,
                         animation: 'float 8s ease-in-out infinite reverse',
                         '@keyframes float': {
                             '0%, 100%': {transform: 'translateY(0px) rotate(0deg)'},
@@ -286,7 +292,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                         zIndex: 2,
                     }}
                 >
-                    <Logo variant="light" size="medium"/>
+                    <Logo variant="auto" size="medium"/>
                 </Box>
 
                 {/* Content */}
@@ -298,6 +304,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                             fontWeight: 'bold',
                             mb: 3,
                             lineHeight: 1.2,
+                            textShadow: isDarkMode ? '0 2px 4px rgba(0,0,0,0.3)' : 'none',
                         }}
                     >
                         Find Your Perfect Home
@@ -307,7 +314,8 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                         sx={{
                             color: 'white',
                             mb: 3,
-                            opacity: 0.9,
+                            opacity: isDarkMode ? 0.95 : 0.9,
+                            textShadow: isDarkMode ? '0 1px 2px rgba(0,0,0,0.2)' : 'none',
                         }}
                     >
                         Discover amazing rental properties in your area
@@ -319,16 +327,16 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                             icon={<LocationIcon/>}
                             label="Trusted Locations"
                             sx={{
-                                backgroundColor: 'rgba(255,255,255,0.15)',
+                                backgroundColor: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.15)',
                                 color: 'white',
                                 backdropFilter: 'blur(10px)',
-                                border: '1px solid rgba(255,255,255,0.2)',
+                                border: isDarkMode ? '1px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.2)',
                                 '& .MuiChip-icon': {color: 'white'},
                                 transition: 'all 0.3s ease',
                                 '&:hover': {
-                                    backgroundColor: 'rgba(255,255,255,0.25)',
+                                    backgroundColor: isDarkMode ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.25)',
                                     transform: 'translateY(-2px)',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                                    boxShadow: isDarkMode ? '0 4px 12px rgba(0,0,0,0.4)' : '0 4px 12px rgba(0,0,0,0.2)',
                                 }
                             }}
                         />
@@ -336,16 +344,16 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                             icon={<StarIcon/>}
                             label="Premium Quality"
                             sx={{
-                                backgroundColor: 'rgba(255,255,255,0.15)',
+                                backgroundColor: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.15)',
                                 color: 'white',
                                 backdropFilter: 'blur(10px)',
-                                border: '1px solid rgba(255,255,255,0.2)',
+                                border: isDarkMode ? '1px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.2)',
                                 '& .MuiChip-icon': {color: 'white'},
                                 transition: 'all 0.3s ease',
                                 '&:hover': {
-                                    backgroundColor: 'rgba(255,255,255,0.25)',
+                                    backgroundColor: isDarkMode ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.25)',
                                     transform: 'translateY(-2px)',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                                    boxShadow: isDarkMode ? '0 4px 12px rgba(0,0,0,0.4)' : '0 4px 12px rgba(0,0,0,0.2)',
                                 }
                             }}
                         />
@@ -353,16 +361,16 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                             icon={<SecurityIcon/>}
                             label="Secure & Safe"
                             sx={{
-                                backgroundColor: 'rgba(255,255,255,0.15)',
+                                backgroundColor: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.15)',
                                 color: 'white',
                                 backdropFilter: 'blur(10px)',
-                                border: '1px solid rgba(255,255,255,0.2)',
+                                border: isDarkMode ? '1px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.2)',
                                 '& .MuiChip-icon': {color: 'white'},
                                 transition: 'all 0.3s ease',
                                 '&:hover': {
-                                    backgroundColor: 'rgba(255,255,255,0.25)',
+                                    backgroundColor: isDarkMode ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.25)',
                                     transform: 'translateY(-2px)',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                                    boxShadow: isDarkMode ? '0 4px 12px rgba(0,0,0,0.4)' : '0 4px 12px rgba(0,0,0,0.2)',
                                 }
                             }}
                         />
@@ -373,13 +381,13 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                         <Chip
                             label="💸 Zero Commission"
                             sx={{
-                                backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                                backgroundColor: isDarkMode ? 'rgba(76, 175, 80, 0.3)' : 'rgba(76, 175, 80, 0.2)',
                                 color: 'white',
-                                border: '1px solid rgba(76, 175, 80, 0.3)',
+                                border: isDarkMode ? '1px solid rgba(76, 175, 80, 0.4)' : '1px solid rgba(76, 175, 80, 0.3)',
                                 fontWeight: 600,
                                 fontSize: '0.85rem',
                                 '&:hover': {
-                                    backgroundColor: 'rgba(76, 175, 80, 0.3)',
+                                    backgroundColor: isDarkMode ? 'rgba(76, 175, 80, 0.4)' : 'rgba(76, 175, 80, 0.3)',
                                     transform: 'translateY(-1px)',
                                 }
                             }}
@@ -387,13 +395,13 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                         <Chip
                             label="🤝 Direct Connection"
                             sx={{
-                                backgroundColor: 'rgba(33, 150, 243, 0.2)',
+                                backgroundColor: isDarkMode ? 'rgba(33, 150, 243, 0.3)' : 'rgba(33, 150, 243, 0.2)',
                                 color: 'white',
-                                border: '1px solid rgba(33, 150, 243, 0.3)',
+                                border: isDarkMode ? '1px solid rgba(33, 150, 243, 0.4)' : '1px solid rgba(33, 150, 243, 0.3)',
                                 fontWeight: 600,
                                 fontSize: '0.85rem',
                                 '&:hover': {
-                                    backgroundColor: 'rgba(33, 150, 243, 0.3)',
+                                    backgroundColor: isDarkMode ? 'rgba(33, 150, 243, 0.4)' : 'rgba(33, 150, 243, 0.3)',
                                     transform: 'translateY(-1px)',
                                 }
                             }}
@@ -401,13 +409,13 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                         <Chip
                             label="🚫 No Middlemen"
                             sx={{
-                                backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                                backgroundColor: isDarkMode ? 'rgba(255, 152, 0, 0.3)' : 'rgba(255, 152, 0, 0.2)',
                                 color: 'white',
-                                border: '1px solid rgba(255, 152, 0, 0.3)',
+                                border: isDarkMode ? '1px solid rgba(255, 152, 0, 0.4)' : '1px solid rgba(255, 152, 0, 0.3)',
                                 fontWeight: 600,
                                 fontSize: '0.85rem',
                                 '&:hover': {
-                                    backgroundColor: 'rgba(255, 152, 0, 0.3)',
+                                    backgroundColor: isDarkMode ? 'rgba(255, 152, 0, 0.4)' : 'rgba(255, 152, 0, 0.3)',
                                     transform: 'translateY(-1px)',
                                 }
                             }}
@@ -418,8 +426,9 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                         variant="body1"
                         sx={{
                             color: 'white',
-                            opacity: 0.8,
+                            opacity: isDarkMode ? 0.9 : 0.8,
                             lineHeight: 1.6,
+                            textShadow: isDarkMode ? '0 1px 2px rgba(0,0,0,0.2)' : 'none',
                         }}
                     >
                         Join thousands of satisfied tenants who found their dream home through our platform.
@@ -435,10 +444,31 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: 'white',
+                    backgroundColor: isDarkMode ? '#121212' : 'white',
                     padding: theme.spacing(3),
+                    position: 'relative',
                 }}
             >
+                {/* Theme Toggle Button */}
+                <Tooltip title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
+                    <IconButton
+                        onClick={toggleTheme}
+                        sx={{
+                            position: 'absolute',
+                            top: theme.spacing(2),
+                            right: theme.spacing(2),
+                            backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                            color: isDarkMode ? 'white' : 'black',
+                            '&:hover': {
+                                backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)',
+                            },
+                            transition: 'all 0.3s ease',
+                        }}
+                    >
+                        {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                    </IconButton>
+                </Tooltip>
+                
                 <Container maxWidth="sm">
                     {children}
                 </Container>

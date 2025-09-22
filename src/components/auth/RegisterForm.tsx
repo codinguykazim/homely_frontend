@@ -26,6 +26,7 @@ import {
   Visibility,
   VisibilityOff,
 } from '@mui/icons-material';
+import { useTheme as useThemeContext } from '../../contexts/ThemeContext';
 
 interface RegisterFormProps {
   onSwitchToLogin: () => void;
@@ -66,6 +67,7 @@ const validationSchema = yup.object({
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
   const navigate = useNavigate();
+  const { isDarkMode } = useThemeContext();
   const [showPassword, setShowPassword] = React.useState(false);
   
   const {
@@ -107,7 +109,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
         borderRadius: 3,
         border: '1px solid',
         borderColor: 'divider',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: isDarkMode ? 'rgba(18, 18, 18, 0.95)' : 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(10px)',
       }}
     >
