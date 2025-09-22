@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import {
   Box,
@@ -12,11 +13,18 @@ import {
   FormControlLabel,
   Checkbox,
   Link,
+  Divider,
+  InputAdornment,
 } from '@mui/material';
 import {
   Facebook as FacebookIcon,
   Google as GoogleIcon,
   LinkedIn as LinkedInIcon,
+  Person as PersonIcon,
+  Email as EmailIcon,
+  Lock as LockIcon,
+  Visibility,
+  VisibilityOff,
 } from '@mui/icons-material';
 
 interface RegisterFormProps {
@@ -57,6 +65,9 @@ const validationSchema = yup.object({
 });
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = React.useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -75,22 +86,51 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
 
   const agreeToTerms = watch('agreeToTerms');
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const onSubmit = (data: any) => {
     console.log('Register data:', data);
     // Handle registration logic here
+    // For now, redirect to home page on successful registration
+    navigate('/');
   };
 
   return (
-    <Paper elevation={0} sx={{ p: 4, maxWidth: 400, mx: 'auto' }}>
+    <Paper 
+      elevation={0} 
+      sx={{ 
+        p: 5, 
+        maxWidth: 450, 
+        mx: 'auto',
+        borderRadius: 3,
+        border: '1px solid',
+        borderColor: 'divider',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(10px)',
+      }}
+    >
+      {/* Header */}
+      <Box sx={{ textAlign: 'center', mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, color: 'text.primary' }}>
+          Join Homely
+        </Typography>
+        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+          Create your account to find your perfect home
+        </Typography>
+      </Box>
+
       {/* Tab Navigation */}
-      <Box sx={{ display: 'flex', mb: 4 }}>
+      <Box sx={{ display: 'flex', mb: 4, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Typography
           variant="h6"
           sx={{
             color: 'text.secondary',
             cursor: 'pointer',
-            pb: 1,
+            pb: 2,
             pr: 3,
+            transition: 'color 0.3s ease',
             '&:hover': {
               color: 'primary.main',
             },
@@ -106,7 +146,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
             color: 'primary.main',
             borderBottom: '2px solid',
             borderColor: 'primary.main',
-            pb: 1,
+            pb: 2,
             pr: 3,
           }}
         >
@@ -122,27 +162,53 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
           {...register('fullName')}
           error={!!errors.fullName}
           helperText={errors.fullName?.message}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <PersonIcon sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
+          }}
           sx={{
-            mb: 2,
+            mb: 3,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: '#f5f5f5',
               borderRadius: 2,
+              backgroundColor: 'rgba(0, 0, 0, 0.02)',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+              '&.Mui-focused': {
+                backgroundColor: 'transparent',
+              },
             },
           }}
         />
         
         <TextField
           fullWidth
-          label="E-mail Address"
+          label="Email Address"
           type="email"
           {...register('email')}
           error={!!errors.email}
           helperText={errors.email?.message}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <EmailIcon sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
+          }}
           sx={{
-            mb: 2,
+            mb: 3,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: '#f5f5f5',
               borderRadius: 2,
+              backgroundColor: 'rgba(0, 0, 0, 0.02)',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+              '&.Mui-focused': {
+                backgroundColor: 'transparent',
+              },
             },
           }}
         />
@@ -150,15 +216,39 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
         <TextField
           fullWidth
           label="Password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           {...register('password')}
           error={!!errors.password}
           helperText={errors.password?.message}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <LockIcon sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleTogglePasswordVisibility}
+                  edge="end"
+                  sx={{ color: 'text.secondary' }}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
           sx={{
-            mb: 2,
+            mb: 3,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: '#f5f5f5',
               borderRadius: 2,
+              backgroundColor: 'rgba(0, 0, 0, 0.02)',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+              '&.Mui-focused': {
+                backgroundColor: 'transparent',
+              },
             },
           }}
         />
@@ -197,7 +287,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
         </Box>
         
         {errors.agreeToTerms && (
-          <Typography variant="body2" color="error" sx={{ textAlign: 'center', mb: 1 }}>
+          <Typography variant="body2" color="error" sx={{ textAlign: 'center', mb: 2 }}>
             {errors.agreeToTerms.message}
           </Typography>
         )}
@@ -210,67 +300,109 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
           disabled={!isValid || !agreeToTerms}
           sx={{
             mb: 3,
-            py: 1.5,
+            py: 1.8,
             borderRadius: 2,
             textTransform: 'none',
-            fontSize: '1rem',
+            fontSize: '1.1rem',
+            fontWeight: 600,
+            background: 'linear-gradient(45deg, #1976d2 30%, #1565c0 90%)',
+            boxShadow: '0 4px 15px rgba(25, 118, 210, 0.3)',
+            '&:hover': {
+              background: 'linear-gradient(45deg, #1565c0 30%, #0d47a1 90%)',
+              boxShadow: '0 6px 20px rgba(25, 118, 210, 0.4)',
+            },
+            '&:disabled': {
+              background: 'rgba(0, 0, 0, 0.12)',
+              color: 'rgba(0, 0, 0, 0.26)',
+              boxShadow: 'none',
+            },
           }}
         >
-          Register
+          Create Account
         </Button>
 
-        {/* Social Register */}
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography
-            variant="body2"
-            sx={{ color: 'text.secondary', mb: 2 }}
-          >
-            Or register with
+        <Divider sx={{ mb: 3 }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary', px: 2 }}>
+            Or continue with
           </Typography>
+        </Divider>
+
+        {/* Social Register */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mb: 3 }}>
+          <IconButton
+            sx={{
+              backgroundColor: '#1877f2',
+              color: 'white',
+              width: 56,
+              height: 56,
+              borderRadius: 2,
+              '&:hover': {
+                backgroundColor: '#166fe5',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 12px rgba(24, 119, 242, 0.3)',
+              },
+              transition: 'all 0.3s ease',
+            }}
+          >
+            <FacebookIcon />
+          </IconButton>
           
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-            <IconButton
+          <IconButton
+            sx={{
+              backgroundColor: '#db4437',
+              color: 'white',
+              width: 56,
+              height: 56,
+              borderRadius: 2,
+              '&:hover': {
+                backgroundColor: '#c23321',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 12px rgba(219, 68, 55, 0.3)',
+              },
+              transition: 'all 0.3s ease',
+            }}
+          >
+            <GoogleIcon />
+          </IconButton>
+          
+          <IconButton
+            sx={{
+              backgroundColor: '#0077b5',
+              color: 'white',
+              width: 56,
+              height: 56,
+              borderRadius: 2,
+              '&:hover': {
+                backgroundColor: '#005885',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 12px rgba(0, 119, 181, 0.3)',
+              },
+              transition: 'all 0.3s ease',
+            }}
+          >
+            <LinkedInIcon />
+          </IconButton>
+        </Box>
+
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Already have an account?{' '}
+            <Link
+              component="button"
+              variant="body2"
+              onClick={onSwitchToLogin}
               sx={{
-                backgroundColor: '#1877f2',
-                color: 'white',
+                color: 'primary.main',
+                fontWeight: 600,
+                textDecoration: 'none',
                 '&:hover': {
-                  backgroundColor: '#166fe5',
+                  textDecoration: 'underline',
                 },
-                width: 48,
-                height: 48,
               }}
             >
-              <FacebookIcon />
-            </IconButton>
-            
-            <IconButton
-              sx={{
-                backgroundColor: '#db4437',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#c23321',
-                },
-                width: 48,
-                height: 48,
-              }}
-            >
-              <GoogleIcon />
-            </IconButton>
-            
-            <IconButton
-              sx={{
-                backgroundColor: '#0077b5',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#005885',
-                },
-                width: 48,
-                height: 48,
-              }}
-            >
-              <LinkedInIcon />
-            </IconButton>
-          </Box>
+              Sign in here
+            </Link>
+          </Typography>
         </Box>
       </Box>
     </Paper>

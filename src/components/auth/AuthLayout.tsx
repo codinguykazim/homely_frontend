@@ -1,6 +1,11 @@
 import React from 'react';
-import { Box, Container, Typography, useTheme } from '@mui/material';
-import { Home as HomeIcon } from '@mui/icons-material';
+import { Box, Container, Typography, useTheme, Chip } from '@mui/material';
+import { 
+  LocationOn as LocationIcon,
+  Star as StarIcon,
+  Security as SecurityIcon
+} from '@mui/icons-material';
+import Logo from '../Logo';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -38,26 +43,13 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
             position: 'absolute',
             top: theme.spacing(4),
             left: theme.spacing(4),
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
           }}
         >
-          <HomeIcon sx={{ color: 'white', fontSize: 32 }} />
-          <Typography
-            variant="h5"
-            sx={{
-              color: 'white',
-              fontWeight: 'bold',
-              fontFamily: 'monospace',
-            }}
-          >
-            Homely
-          </Typography>
+          <Logo variant="light" size="medium" />
         </Box>
 
         {/* Content */}
-        <Box sx={{ textAlign: 'center', maxWidth: 400 }}>
+        <Box sx={{ textAlign: 'center', maxWidth: 500 }}>
           <Typography
             variant="h3"
             sx={{
@@ -67,18 +59,50 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
               lineHeight: 1.2,
             }}
           >
-            {title}
+            Find Your Perfect Home
           </Typography>
           <Typography
             variant="h6"
             sx={{
               color: 'white',
-              mb: 2,
+              mb: 3,
               opacity: 0.9,
             }}
           >
-            {subtitle}
+            Discover amazing rental properties in your area
           </Typography>
+          
+          {/* Feature highlights */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center', mb: 3 }}>
+            <Chip
+              icon={<LocationIcon />}
+              label="Verified Locations"
+              sx={{ 
+                backgroundColor: 'rgba(255,255,255,0.2)', 
+                color: 'white',
+                '& .MuiChip-icon': { color: 'white' }
+              }}
+            />
+            <Chip
+              icon={<StarIcon />}
+              label="Top Rated"
+              sx={{ 
+                backgroundColor: 'rgba(255,255,255,0.2)', 
+                color: 'white',
+                '& .MuiChip-icon': { color: 'white' }
+              }}
+            />
+            <Chip
+              icon={<SecurityIcon />}
+              label="Secure Booking"
+              sx={{ 
+                backgroundColor: 'rgba(255,255,255,0.2)', 
+                color: 'white',
+                '& .MuiChip-icon': { color: 'white' }
+              }}
+            />
+          </Box>
+          
           <Typography
             variant="body1"
             sx={{
@@ -87,7 +111,8 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
               lineHeight: 1.6,
             }}
           >
-            {description}
+            Join thousands of satisfied tenants who found their dream home through our platform. 
+            Start your journey today!
           </Typography>
         </Box>
       </Box>
