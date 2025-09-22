@@ -94,7 +94,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
     console.log('Register data:', data);
     // Handle registration logic here
     // For now, redirect to home page on successful registration
-    navigate('/');
+    navigate('/home');
   };
 
   return (

@@ -50,7 +50,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
     console.log('Login data:', formData);
     // Handle login logic here
     // For now, redirect to home page on successful login
-    navigate('/');
+    navigate('/home');
   };
 
   return (
@@ -296,8 +296,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
           display: 'flex', 
           justifyContent: 'center', 
           alignItems: 'center',
-          minHeight: 48,
-          textAlign: 'center'
+          mb: 2,
+          minHeight: 24
         }}>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             Don't have an account?{' '}
